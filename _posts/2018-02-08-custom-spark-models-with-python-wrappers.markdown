@@ -17,7 +17,7 @@ For a better understanding, I recommend studying Spark's code. Start with a easy
 
 We will use `Spark 2.2.1` and the `ML API` that makes use of the `DataFrame` abstraction.
 
-The complete workable example can be found on this [repository][repo]. It has the scala plus the python wrapper implementation and boiler plate for testing in both languages.
+The complete example can be found on this [repository][repo]. It contains the scala code plus the python wrapper implementation and boiler plate for testing in both languages.
 
 ### Custom Estimator/Transformer
 
