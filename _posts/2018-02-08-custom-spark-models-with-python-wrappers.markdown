@@ -2,7 +2,7 @@
 layout: post
 title:  "Custom Spark ML with a Python wrapper"
 date:   2018-02-08 01:01:33 +0000
-subtitle: Extend Spark ML functionality with your own models  
+subtitle: Extend Spark ML functionality with your own models and provide access from python
 <!-- bigimg: /img/path.jpg -->
 gh-repo: raufer/custom-spark-models
 gh-badge: [star, fork]

@@ -11,7 +11,7 @@ Lets suppose you need a database of companies that in the UK that are allowed to
 
 This data is public and available in the [financial conduct authority][fca-base]
 
-![My helpful screenshot]({{ "/imgs/sap/fca-basic.png" | absolute_url }})
+![My helpful screenshot]({{ "/img/sap/fca-basic.png" | absolute_url }})
 
 To help us parsing the HTML page we will need [BeautifulSoup][bs].
 
@@ -69,7 +69,7 @@ The data we've already extracted is a start. However most of the times we need m
 
 This information is under the **permissions** tab.
 
-![img]({{ "/imgs/sap/fca-02.png" | absolute_url }})
+![img]({{ "/img/sap/fca-02.png" | absolute_url }})
 
 However the information being displayed is dynamically loaded by a javascript routine once the user clicks in the **permissions** tab. It wasn’t present in the original HTML page.
 
