@@ -9,7 +9,7 @@ gh-badge: [star, fork]
 tags: [python, dataflow, ml pipelines, currying]
 ---
 
-This post serves as first discussion regarding a proof of concept for what I believe to be a proper way of designing and managing machine learning pipelines.
+This post serves as first discussion regarding a proof of concept for what I believe is a proper way to design and manage machine learning pipelines.
 
 A general ML pipeline will have data streamed to it or pulled from storage. Once the data is ingested, a (possibly complex) set of transformations will extract useful information from this data, represent it in suitable form, and ask one (possibly more) model what it thinks about it.
 
