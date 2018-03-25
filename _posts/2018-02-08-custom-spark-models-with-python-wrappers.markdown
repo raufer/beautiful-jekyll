@@ -9,7 +9,7 @@ gh-badge: [star, fork]
 tags: [spark, scala, python]
 ---
 
-Spark is a framework that tries to provides answers to many problems at once. At its core it allows for the distribution of generic workloads to a cluster. But then it provides a SQL-like API to work with structured data, a streaming engine to support applications with fast-data requirements and, the one we are interested here today, a distributed machine learning library with a lot of models and general feature extraction, transforming and selection implementations. Support abstractions for composing ML pipelines or hyperparameter tunning, among others, are also provided.
+Spark is a framework which tries to provides answers to many problems at once. At its core it allows for the distribution of generic workloads to a cluster. But then it provides a SQL-like API to work with structured data, a streaming engine to support applications with fast-data requirements and, the one we are interested here today, a distributed machine learning library with a lot of models and general feature extraction, transforming and selection implementations. Support abstractions for composing ML pipelines or hyperparameter tunning, among others, are also provided.
 
 Event tough we get a lot out of the box from Spark ML, there will eventually be cases where you need to develop your custom transformations. Maybe the data science team you are working with as came up with some new complex features that turned out to be really valuable to the problem and now you need to implement these transformations at scale. Ideally, you will want to write them using Scala and expose a Python wrapper to facilitate their use.
 
