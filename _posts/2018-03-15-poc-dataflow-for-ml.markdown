@@ -2,7 +2,7 @@
 layout: post
 title:  "Proof of concept for constructing ML pipelines"
 date:   2018-02-08 01:01:33 +0000
-subtitle: A proposal of a design pattern support the creation of machine learning pipelines using dataflow and currying.
+subtitle: A proposal of a design pattern to support the creation of machine learning pipelines using dataflow and currying.
 <!-- bigimg: /img/path.jpg -->
 gh-repo: raufer/flow-writer
 gh-badge: [star, fork]
@@ -139,7 +139,7 @@ def pipeline(df, param1, param2, param3, param4, *_):
     df_ohe = one_hot_encoder_step(df_clean, col=param2)
 
     # write intermediary steps
-    write_df('s3://pipeline/intermediary_ohe')  
+    write_df('s3://pipeline/intermediary_ohe')
 
     df_ngrams = ngrams_step(df_ohe, ngrams=param3)
 
@@ -148,7 +148,7 @@ def pipeline(df, param1, param2, param3, param4, *_):
     df_result = calculate_statistics(df_sparse, ['mean', 'avg', 'max'], col=param4)
 
     # write final results
-    write_df('s3://pipeline/final')  
+    write_df('s3://pipeline/final')
 
     return df_result
 ```
@@ -167,7 +167,7 @@ We propose now a minimalist thin layer to support the development of ML pipeline
 
 - Testability concerns should be addressed at the library design phase. The pipeline and associated components should be easily tested.
 
-- The caller should have complete control over the execution workflow. This is specially important for debugging, where we might need to probe the signal at an intermediary step for a closer inspection. A lazy execution mode should also be available for a finer execution control.  
+- The caller should have complete control over the execution workflow. This is specially important for debugging, where we might need to probe the signal at an intermediary step for a closer inspection. A lazy execution mode should also be available for a finer execution control.
 
 - Side effects managing. Error handling and persistence are two important in a production environment and they should be handling at the library layer, which creates the opportunity to factor out behaviour common to all of the pipelines. The data scientist ideally should not need to worry about these boring details.
 
