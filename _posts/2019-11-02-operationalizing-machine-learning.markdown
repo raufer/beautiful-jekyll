@@ -263,6 +263,11 @@ Different flavours of these environments, with different technological stacks, c
 [JupyterHub](https://jupyterhub.readthedocs.io/) or [Anaconda](https://www.anaconda.com/) are well known tools that provide exploratoty user-sessions on top of Kubernetes.
 
 
+### CICD 
+
+[Jenkins X](https://jenkins.io/projects/jenkins-x/) is Kubernetes native and can be used for integration and deployment. It creates a consise system where the integrations pipelines run inside of the same cluster. It supports environment promotio, with multiple deployment strategies, via [GitOps](https://www.weave.works/technologies/gitops/), which gives us the ability to perform declarative application deployments via Git.
+
+
 ## Workflow Diagram
 
 
