@@ -241,11 +241,11 @@ A simple way would be to have the data version as a configuration in the reposit
 
 The CICD pipeline would be triggered in two ways:
 
-* 1. Code Change
+* 1 - Code Change
 
 The team changes the logic of the model training process, e.g. new features, more complex models, etc.
 
-* 2. Data Changes
+* 2 - Data Changes
 
 Every time data changes, a pipeline must be triggered that will version it in Pachyderm and commit a change to the relevant repositories by changing `train.commit` in `/configuration/data.json`; this, in turn, will trigger an execution of the training process.
 
