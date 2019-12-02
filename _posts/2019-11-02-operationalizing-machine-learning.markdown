@@ -100,7 +100,7 @@ Each deployment exposes two default endpoints: `predict` and `feedback`:
 
 ![platform]({{ "/img/ops-ml/seldon-31.png" | absolute_url }})
 
-The `predict` is the one used to trigger the execution of the graph to get an inference. We can use the `feedback` endpoint to capture responses when these are made available. The later is important for:
+The `predict` is the one used to to retrieve an inference. We can use the `feedback` endpoint to capture responses when these are made available. The later is important for:
 
 * Help to decide which model should serve more traffic when running inference graphs with A/B or multi-armed bandits;
 * Models that support online training;
