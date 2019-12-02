@@ -100,7 +100,15 @@ jx-staging     manticore-manticore-a0b1623   Deployment/manticore-manticore-a0b1
 
 To expose the models to consumers outside of the cluster Seldon integrates with [istio](https://istio.io/). Everytime that the Seldon Kubernetes Operator detects a request for a Seldon deployment, it injects the necessary instructions to wire the service to `istio`. `L7 Routing` capability is also available via the integration with `istio`.
 
-![platform]({{ "/img/ops-ml/seldon-3.png" | absolute_url }})
+Each deployment exposes two default endpoints: `predict` and `feedback`:
+
+![platform]({{ "/img/ops-ml/seldon-4.png" | absolute_url }})
+
+The `predict` is the one used to trigger the execution of the graph to get an inference. We can use the `feedback` endpoint to capture responses, when these are made available. The later is important for:
+
+* Help deciding which model should serve more traffic when running inference graphs with A/B or multi-armed bandits;
+* Models that support online training;
+* Capturing new labelled data to be used in retraining jobs;
 
 #### Model Observability
 
