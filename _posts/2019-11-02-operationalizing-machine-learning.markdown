@@ -110,6 +110,9 @@ The `predict` is the one used to trigger the execution of the graph to get an in
 * Models that support online training;
 * Capturing new labelled data to be used in retraining jobs;
 
+<br/><br/>
+
+.
 
 #### Model Observability
 
