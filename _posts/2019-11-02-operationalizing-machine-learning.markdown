@@ -253,7 +253,7 @@ Every time data changes, a pipeline must be triggered that will version it in Pa
 ### Data Exploration
 
 Teams require the ability to create data exploration environments, from which they can access the data to research possible solutions to the problems they are working on.
-Special purpose hardware like GPUs should be made available on-demand when needed.
+Special purpose hardware like GPUs should also be made available on-demand when needed.
 
 Different flavors of these environments, with different technological stacks, can provide development velocity and flexibility to different teams.
 
@@ -267,7 +267,7 @@ Different flavors of these environments, with different technological stacks, ca
 
 ## Workflow Diagram
 
-The following diagram depicts the end-to-end workflow.
+The following diagram depicts the end-to-end workflow. Every step is detailed below.
 
 
 ![platform]({{ "/img/ops-ml/opsml-workflow-2.png" | absolute_url }})
