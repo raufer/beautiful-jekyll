@@ -31,13 +31,31 @@ We are going to propose a technology stack for a ML-platform solution that is ab
 ![platform]({{ "/img/ops-ml/platform-components.png" | absolute_url}})
 
 
-...
-
 ### ML Primitives
 
 Lets briefly describe the responsabilities of each modular component. We'll also look to the current technology landscape and suggest tools that can solve the challenges posed by each layer.
 
 #### Model Training
+
+Training machine learning models can be a highly time-consuming task. It can also be demanding from a resources allocation prespective, since bigger datasets and sophisticated models might require considerable amounts of processing power, which sometimes needs to come in specialized form, e.g. GPUs, TPU, etc.
+
+As *Auto Machine Learning* technology improves, the process by which we select a  model, along with its tunned hyperparameters, is becoming more standardized. This wide search space is being explored by various methods like Bayesion Optimization or Genetic Programming. However, these algorithms can take a long time to finish their search.
+
+Most of the times they aren't as simple as fitting one model on the dataset; they are considering multiple machine learning algorithms (random forests, linear models, SVMs, etc.) in a pipeline with multiple preprocessing steps (missing value imputation, scaling, PCA, feature selection, etc.), the hyperparameters for all of the models and preprocessing steps, as well as multiple ways to ensemble or stack the algorithms within the pipeline.
+
+As an example consider a Genetic Programming library to evolve a ML pipeline that considers various preprocessing steps and multiple machine learning algorithms; Assume a configuration of `100 generations` with `100 population size`; This would result in 10,000 model configurations to evaluate with 10-fold cross-validation, which means that roughly 100,000 models are fit and evaluated on the training data. This is a time-consuming procedure, even for simpler models like decision trees.
+
+We need an orchestration tool that allows us to orchestrate machine learning training pipeline at scale. [Kubeflow Pipelines](https://www.kubeflow.org/docs/pipelines/overview/pipelines-overview/) is such a tool, belonging to Google's [Kubeflow](https://www.kubeflow.org/) ML ecosystem, a project dedicated to making deployments of machine learning (ML) workflows on Kubernetes.
+
+Kubeflow Pipelines is Kubernetes-native workflow orchestrator that builds on top of [Argo Workflows](https://argoproj.github.io/argo/); it isn't a typical orchestrator in the sense that it knows the structure of a typical ML workflow and so provides features that leverage that knowledge. It has a built-in `Experiment` concept that can be used to run a workflow with a set of parameters so that we can then track the associated performance metrics. It also allows a workflow to output
+different artifacts that are used to assess the model performance/behaviour. 
+
+Here's an illustration of a workflow:
+
+![platform]({{ "/img/ops-ml/kubeflow-1.png" | absolute_url}})
+
+
+
 
 #### Model Serving
 
@@ -58,7 +76,30 @@ Being able to create arbitrarily complex inference graphs creates the opportunit
 
 Every graph has a model orchestration pod at the top with a standardized API contract for both REST and gRPC. When it receives a request (or a batch of requests) it then triggers the execution of the graph. The of the wiring between the steps is handled by Seldon.
 
+We can also leverage Kubernete's inherent scalability capability to serve models at scale. Here's the relevant part of a Seldon's graph definition:
 
+
+```yaml
+hpaSpec:
+  minReplicas: 1
+  maxReplicas: 4
+    metrics:
+      - type: Resource
+        resource:
+          name: cpu
+          targetAverageUtilization: 0.80
+```
+
+This in turn will create Horizontal Pod Autoscaler (HPA) rules in Kubernetes that monitor the service metrics. Once the metric threshold is not respected, a service replica is created to cope with the increased traffic.
+
+```bash
+❯ kubectl get hpa --all-namespaces
+
+NAMESPACE      NAME                          REFERENCE                                TARGETS   MINPODS   MAXPODS   REPLICAS   AGE
+jx-staging     manticore-manticore-a0b1623   Deployment/manticore-manticore-a0b1623   39%/80%   1         4         1          28d
+```
+
+To expose the models to consumers outside of the cluster Seldon integrates with [istio](https://istio.io/). Everytime that the Seldon Kubernetes Operator detects a request for a Seldon deployment, it injects the necessary instructions to wire the service to `istio`. `L7 Routing` capability is available via the integration with `istio`.
 
 #### Model Observability
 
