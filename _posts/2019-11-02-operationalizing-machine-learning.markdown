@@ -112,7 +112,7 @@ The `predict` is the one used to to retrieve an inference. We can use the `feedb
 
 Once a model is live, we do need to be able to monitor technical metrics like the number of requests/sec or the response latency.
 
-However, data science teams should have to observe more functional metrics like the real-time performance of the model, the bias in the response or the distribution of the input data. This would provide useful insights to the teams to detect possible drifts in the target signal, or on how to make the model fairer.
+However, data science teams should have to observe more functional metrics like the real-time performance of the model, the bias in the response or the distribution of the input data. This would provide useful insights to the teams to detect possible drifts in data distribution, or on how to make the model fairer.
 
 Seldon provides an awesome integration with [Grafana](https://grafana.com/dashboards) and [Prometheus](https://prometheus.io/). For each Seldon Deployment, the Seldon's Service Orchestrator exposes a set of default Prometheus metrics which are then displayed in a central Grafana dashboard.
 
@@ -121,7 +121,7 @@ Here's an illutratrion of what this looks like:
 ![platform]({{ "/img/ops-ml/dashboard-1.png" | absolute_url }})
 
 
-Custom metrics can be easily exposed and integrated with these dashboards. Seldon takes care of all of the wiring and communication among the services. At the dashboard level, we can select different deployments, versions or even particular containers that form an inference graph.
+Custom metrics can be easily exposed and integrated in these dashboards. Seldon takes care of all of the wiring and communication among the services. At the dashboard level, we can select different deployments, versions or even particular containers that form an inference graph.
 
 ### Governance
 
@@ -137,7 +137,7 @@ An ML model is not much different from data: a set of learned weights along with
 
 Experiment tracking can be done at the orchestrator level, e.g. Kubeflow Pipelines. If a more specialized service is needed, a [ML Flow Tracking](https://www.mlflow.org/docs/latest/tracking.html) service can be used. The later is particularly relevant if we also need to track experiments made by data scientists at *exploration phase*, i.e. when they are exploring the data and testing out ideas. MLFlow provides a simple `python`/`R` library that can be integrated into a data scientist exploration environment to track performance metrics and parameters used.
 
-e.g.:
+e.g. (from `python`):
 
 ```python
 import mlflow
@@ -172,20 +172,20 @@ with mlflow.start_run():
     mlflow.sklearn.log_model(lr, "model")
 ```
 
-With such a service we can centralize the information related to every ML experiment:
+With this service we can centralize the information related to every ML experiment:
 
 * Experiments performed by the CICD infrastructure as a response to a data/code change;
-* Experiments performed by data scientists while they are exploring new ideas;
+* Experiments performed by data scientists while they are exploring new solutions;
 
 The `MLFlow` artifact store can also be used as a model repository.
 
 Treating a data change in the same way as a code change requires tooling to support some kind of formal *data versioning*.
-[Pachyderm](https://www.pachyderm.com/) is a Kubernetes framework that can help us with the engineering side of ML workflows. It can be used as *git for data*.
+[Pachyderm](https://www.pachyderm.com/) is a Kubernetes framework that can help with the engineering side of ML workflows. It can be used as kind of *git for data*.
 
 This also means that our training workflows cannot explicitly consume the data when an execution is triggered. The consumption must be declarative and done via `git`.
 By doing so, the CICD pipeline can respond in the same way to changes in both code and data.
 
-Pachyderm provides an intuitive solution for data versioning. The following snippets illustrate the typical workflow when working with Pachyderm (via the `patchctl` CLI).
+Pachyderm provides an intuitive solution for data versioning. The following snippets illustrate the concept and the typical workflow when working with Pachyderm (via the `patchctl` CLI):
 
 Create a data repository:
 
@@ -199,7 +199,7 @@ Commit data to master branch:
 pachctl put file -r product-recommendation@master:/data -f data/
 ```
 
-We can then list all of the different versions of the `master` branch:
+We can then list all of the different data versions of the `master` branch:
 
 
 ```bash
@@ -241,11 +241,11 @@ A simple way would be to have the data version as a configuration in the reposit
 
 The CICD pipeline would be triggered in two ways:
 
-1. Code Change
+* 1. Code Change
 
 The team changes the logic of the model training process, e.g. new features, more complex models, etc.
 
-2. Data Changes
+* 2. Data Changes
 
 Every time data changes, a pipeline must be triggered that will version it in Pachyderm and commit a change to the relevant repositories by changing `train.commit` in `/configuration/data.json`; this, in turn, will trigger an execution of the training process.
 
