@@ -100,7 +100,7 @@ To expose the models to consumers outside of the cluster Seldon integrates with 
 
 Each deployment exposes two default endpoints: `predict` and `feedback`:
 
-![platform]({{ "/img/ops-ml/seldon-4.png" | absolute_url }})
+![platform]({{ "/img/ops-ml/seldon-41.png" | absolute_url }})
 
 The `predict` is the one used to trigger the execution of the graph to get an inference. We can use the `feedback` endpoint to capture responses, when these are made available. The later is important for:
 
