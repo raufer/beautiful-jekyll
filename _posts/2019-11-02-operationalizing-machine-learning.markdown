@@ -1,8 +1,8 @@
 ---
 layout: post
-title:  "Operationalizing Machine Learning"
+title:  "The Open approach to Operationalize Machine Learning"
 date:   2019-08-02 09:01:33 +0000
-subtitle: Constructing an ecosystem to handle the complexity of Machine Learning services
+subtitle: Constructing an open-source ecosystem to handle the complexity of Machine Learning services
 <!-- bigimg: /img/path.jpg -->
 gh-repo: raufer/flow-writer
 gh-badge: [star, fork]
@@ -28,7 +28,7 @@ privileged access for others? Controls are needed to ensure data is treated fair
 
 We are going to propose a technology stack for a ML-platform solution that is able to describe processes respecting the desired properties. The following illustratres the different components involved:
 
-![platform]({{ "/img/ops-ml/platform-components.png" | absolute_url}})
+![platform]({{ "/img/ops-ml/platform-components-1.png" | absolute_url}})
 
 
 ### ML Primitives
