@@ -273,7 +273,7 @@ Different flavours of these environments, with different technological stacks, c
 The following diagram depcits the end-to-end workflow.
 
 
-![platform]({{ "/img/ops-ml/opsml-workflow.png" | absolute_url }})
+![platform]({{ "/img/ops-ml/opsml-workflow-2.png" | absolute_url }})
 
 Once a project is integrated into the platform, the integration pipeline is triggered either via a code (1) or a data change (2). 
 
