@@ -28,7 +28,7 @@ privileged access for others? Controls are needed to ensure data is treated fair
 
 We are going to propose a technology stack for a ML-platform solution that is able to describe processes respecting the desired properties. The following illustratres the different components involved:
 
-![platform]({{ "/img/ops-ml/platform-components.png" | absolute_url }})
+![platform]({{ "/img/ops-ml/platform-components.png" | absolute_url | width=50}})
 
 
 ...
