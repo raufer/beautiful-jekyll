@@ -266,6 +266,9 @@ Different flavours of these environments, with different technological stacks, c
 ## Workflow Diagram
 
 
+![platform]({{ "/img/ops-ml/opsml-workflow.png" | absolute_url }})
+
+
 
 
 ==>>>
