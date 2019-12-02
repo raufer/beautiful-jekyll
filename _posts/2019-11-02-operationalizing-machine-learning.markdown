@@ -267,7 +267,7 @@ Different flavors of these environments, with different technological stacks, ca
 
 ## Workflow Diagram
 
-The following diagram depicts the end-to-end workflow. Every step is detailed below.
+The following diagram depicts the end-to-end workflow. Every step then is detailed below.
 
 
 ![platform]({{ "/img/ops-ml/opsml-workflow-2.png" | absolute_url }})
