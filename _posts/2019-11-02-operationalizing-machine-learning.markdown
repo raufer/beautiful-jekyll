@@ -112,8 +112,6 @@ The `predict` is the one used to trigger the execution of the graph to get an in
 
 <br/><br/>
 
-.
-
 #### Model Observability
 
 Once a model is live, we do need to be able to monitor technical metrics like the number of requests/sec or the response latency.
@@ -127,8 +125,7 @@ Here's an illutratrion of what this looks like:
 ![platform]({{ "/img/ops-ml/dashboard-1.png" | absolute_url }})
 
 
-
-
+Custom metrics can be easily exposed and integrated with these dashboards. Seldon takes care of all of wiring and communication among the services. At the dasboard level, we are able select different deployments, versions or even particular containers that form a inference graph.
 
 #### Governance
 
