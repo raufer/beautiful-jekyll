@@ -129,6 +129,60 @@ Custom metrics can be easily exposed and integrated with these dashboards. Seldo
 
 #### Governance
 
+A model's behaviour is affected not only by its code and configuration but also by data consumed at training time. The following is a non exhaustive list of what is needed to achieve governance when deploying ML services:
+
+* Every Machine Learning Asset should be versioned. This includes code, data, configuration, models, inference graphs etc.
+* There should be visibility over the different experiments performed and associated metrics;
+* Every model should be reproducible;
+* We should be able to verify the results of a Machine Learning model to ensure we are only integrating models with acceptable performance;
+* Rollback mechanisms should be in place;
+
+A ML model is not much different from data: a set of learned weights along with some metadata. Any artifact storage solution should suffice to be used as a model repository. Nexus or a object storage like MongoDB can be used as a model repository.
+
+Experiments tracking can be done at the orchestrator level, e.g. Kubeflow Pipelines. If a more specialized service is need, a [ML Flow Tracking](https://www.mlflow.org/docs/latest/tracking.html) service can be used. The later is speciality relevant if we also need to track experiments made data scientist at *exploration phase*, i.e. when they ae exploring the data and testing out ideas. MLFlow provides a simple `python`/`R` library that can integrated in a data scientist exploration
+environment to track performance metrics and parameters used.
+
+e.g.:
+
+```python
+import mlflow
+
+...
+
+with mlflow.start_run():
+
+    lr = ElasticNet(alpha=alpha, l1_ratio=l1_ratio, random_state=42)
+    lr.fit(train_x, train_y)
+
+    predicted_qualities = lr.predict(test_x)
+
+    (rmse, mae, r2) = eval_metrics(test_y, predicted_qualities)
+
+    # Print out ElasticNet model metrics
+    print("Elasticnet model (alpha=%f, l1_ratio=%f):" % (alpha, l1_ratio))
+    print("  RMSE: %s" % rmse)
+    print("  MAE: %s" % mae)
+    print("  R2: %s" % r2)
+
+    # Set tracking_URI first and then reset it back to not specifying port
+    # Note, we had specified this in an earlier cell
+    mlflow.set_tracking_uri(mlflow_tracking_URI)
+
+    # Log mlflow attributes for mlflow UI
+    mlflow.log_param("alpha", alpha)
+    mlflow.log_param("l1_ratio", l1_ratio)
+    mlflow.log_metric("rmse", rmse)
+    mlflow.log_metric("r2", r2)
+    mlflow.log_metric("mae", mae)
+    mlflow.sklearn.log_model(lr, "model")
+```
+
+With such a service we can centralize the information related to every ML experiment:
+
+* Experiments performed by the CICD infrastructure as a response to a data/code change; 
+* Experiments performed by data scientists while they are exploring new ideas;
+
+
 #### Data Exploration
 
 
