@@ -2,7 +2,7 @@
 layout: post
 title:  "Operationalizing Machine Learning"
 date:   2019-08-02 09:01:33 +0000
-subtitle: Constructing a ML ecosystem to handle the complexity of these systems
+subtitle: Constructing an ecosystem to handle the complexity of Machine Learning services
 <!-- bigimg: /img/path.jpg -->
 gh-repo: raufer/flow-writer
 gh-badge: [star, fork]
