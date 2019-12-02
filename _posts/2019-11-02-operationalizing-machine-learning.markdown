@@ -280,7 +280,7 @@ We then publish every build artifact to their respective repositories (5):
 * Push all of the images belonging to the Kubeflow training pipeline and Seldon's Inference Graph to a registry.
 * Publish a new version of a Helm Chart containing the new version of the service (Seldon Deployment Object).
 * Push the new model version to the model repository;
-* Deploy the new version of the Kubeflow ML training pipeline to the Kubeflow server.
+* Deploy the new version of the training pipeline to the Kubeflow server.
 
 The staging environment repository should then be updated with the new version of the application (6). The deployment is performed declaratively via the Jenkins X Kubernetes operator, which synchronizes the repository state with the cluster applicational state.
 
@@ -294,3 +294,4 @@ A new version of the service is then deployed (7), consisting of the following a
 
 The model is exposed to be consumed outside of the cluster through a Load Balancer (8) (either L4 or L7).
 
+After this the service is ready to be tested at the `staging` environment. It can then be easily promoted to the next environment once the tests at the `staging` environment are complete.
