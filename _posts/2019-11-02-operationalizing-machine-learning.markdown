@@ -110,9 +110,22 @@ The `predict` is the one used to trigger the execution of the graph to get an in
 * Models that support online training;
 * Capturing new labelled data to be used in retraining jobs;
 
+
 #### Model Observability
 
-Once a model is live, we do need to be able to monitor technical metrics like the number of requests/sec; the response latency; 
+Once a model is live, we do need to be able to monitor technical metrics like the number of requests/sec or the response latency.
+
+However, data science teams should have observe more functional metrics like the real time performance of the model, the bias in the response or the distribution of the input data.This would provide useful insights to the teams to detect possible drifts in the target signal, or on how to make the model fairer.
+
+Seldon provides an awesome integration with [Grafana](https://grafana.com/dashboards) and [Prometheus](https://prometheus.io/). For each Seldon Deployment, the Seldon's Service Orchestrator exposes a set of default Prometheus metrics which are then displayed in a central Grafana dashboard.
+
+Here's an illutratrion of what this looks like:
+
+![platform]({{ "/img/ops-ml/dashboard-1.png" | absolute_url }})
+
+
+
+
 
 #### Governance
 
