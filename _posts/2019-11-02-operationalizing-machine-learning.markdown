@@ -31,11 +31,11 @@ We are going to propose a technology stack for a ML-platform solution that is ab
 ![platform]({{ "/img/ops-ml/platform-components-2.png" | absolute_url}})
 
 
-### ML Primitives
+## ML Primitives
 
 Lets briefly describe the responsabilities of each modular component. We'll also look to the current technology landscape and suggest tools that can solve the challenges posed by each layer.
 
-#### Model Training
+### Model Training
 
 Training machine learning models can be a highly time-consuming task. It can also be demanding from a resources allocation prespective, since bigger datasets and sophisticated models might require considerable amounts of processing power, which sometimes needs to come in specialized form, e.g. GPUs, TPU, etc.
 
@@ -56,7 +56,7 @@ Here's an illustration of a workflow:
 
 Every step runs in its own container, allowing us to: isolate software dependencies; optimize required resources for each step; and easily parallelize parts of the workflow.
 
-#### Model Serving
+### Model Serving
 
 Once a training process results in a satisfactory model, the later should be made available at a central repository to facilitate its integration into a service.
 
@@ -112,7 +112,7 @@ The `predict` is the one used to trigger the execution of the graph to get an in
 
 <br/><br/>
 
-#### Model Observability
+### Model Observability
 
 Once a model is live, we do need to be able to monitor technical metrics like the number of requests/sec or the response latency.
 
@@ -127,7 +127,7 @@ Here's an illutratrion of what this looks like:
 
 Custom metrics can be easily exposed and integrated with these dashboards. Seldon takes care of all of wiring and communication among the services. At the dasboard level, we are able select different deployments, versions or even particular containers that form a inference graph.
 
-#### Governance
+### Governance
 
 A model's behaviour is affected not only by its code and configuration but also by data consumed at training time. The following is a non exhaustive list of what is needed to achieve governance when deploying ML services:
 
@@ -182,8 +182,90 @@ With such a service we can centralize the information related to every ML experi
 * Experiments performed by the CICD infrastructure as a response to a data/code change; 
 * Experiments performed by data scientists while they are exploring new ideas;
 
+The `MLFlow` artifact store can also be used as a model repository.
 
-#### Data Exploration
+Treating a data change in the same way as a code change requires tooling to support some kind of formal *data versioning*.
+[Pachyderm](https://www.pachyderm.com/) is Kubernetes framework that can help us with the engineering side of ML workflows. It can used as *git for data*.
+
+This also means that we our training workflows cannot explicitly consume the data when an execution is triggered. The consumption must be declarative and done via `git`.
+By doing so, the CICD pipeline can respond in the same way to changes in both code and data.
+
+Pachyderm provides an intuitive solution for data versioning. The following snippets illustrate the typical workflow when working with Pachyderm (via the `patchctl` CLI).
+
+Create a data repository:
+
+```bash
+pachctl create repo product-recommendation
+```
+
+Commit data to master branch:
+
+```bash
+pachctl put file -r product-recommendation@master:/data -f data/
+```
+
+We can then list all of the different versions of the `master` branch:
+
+
+```bash
+❯ pachctl list commit product-recommendation
+
+REPO                   BRANCH COMMIT                           PARENT STARTED    DURATION           SIZE
+product-recommendation master 70c9c944ed5f4d7286d5f16461d07c91 <none> 3 days ago Less than a second 52.4MiB
+```
+
+Note that `master` is just a pointer to the latest commit hash. To illustrate this consider the following example:
+
+```bash
+❯ pachctl list commit product-recommendation
+REPO                   BRANCH COMMIT                           PARENT STARTED      DURATION           SIZE
+product-recommendation master e37161e974e8482bbccc89e01b414f7c <none> 26 hours ago Less than a second 3.768KiB
+product-recommendation master c3f0233361fd43f39f532ec6859001c8 <none> 26 hours ago 1 second           3.768KiB
+```
+
+The folllowing commands are equivalent:
+
+```bash
+pachctl get file product-recommendation@master:/data/ --recursive --output .
+pachctl get file product-recommendation@e37161e974e8482bbccc89e01b414f7c:/data/ --recursive --output .
+```
+
+Every change must have associated a particular version of the code and data. This is why the data cannot be consumed directly and must be done via `git`.
+
+A simple way would be to have the data version as a configuration in the repository:
+
+`/configuration/data.json`
+
+```json
+{
+  "train": {
+      "commit": "befcd45a69704b3094f10a031ffaf398"
+  }
+}
+```
+
+The CICD pipeline would be triggered in two ways:
+
+1. Code Change
+
+The team changes the logic of the model training process, e.g. new features, more complex model, etc.
+
+2. Data Changes
+
+Every time data changes, a pipeline must be triggered that will version it in Pachyderm and commit a change to the relevant repositories by changing `train.commit` in `/configuration/data.json`; this in turn will trigger an execution of the training process.
+
+
+### Data Exploration
+
+Teams require the ability to create data exploration environments, from which they can access the data to research possible solutions to the problems they are working on.
+Special purpose hardware like GPUs should be made available on demand when needed. 
+
+Different flavours of these environments, with different technological stacks, can provide development velocity and flexibility to different teams.
+
+[JupyterHub](https://jupyterhub.readthedocs.io/) or [Anaconda](https://www.anaconda.com/) are well known tools that provide user-sessions on top of Kubernetes.
+
+
+## Workflow Diagram
 
 
 
