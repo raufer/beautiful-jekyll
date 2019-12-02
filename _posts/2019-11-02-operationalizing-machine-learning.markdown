@@ -270,21 +270,32 @@ Different flavours of these environments, with different technological stacks, c
 
 ## Workflow Diagram
 
+The following diagram depcits the end-to-end workflow.
+
 
 ![platform]({{ "/img/ops-ml/opsml-workflow.png" | absolute_url }})
 
+Once a project is integrated into the platform, the integration pipeline is triggered either via a code (1) or a data change (2). 
 
+At building stage (3) we build every step of the Kubeflow ML training workflow as well as every step of the Seldon's Inference Graph; we should have unit tests for every individual component and more comprehensive tests for the model that will compare the model's predicitons against a known set of cases (4); if the model does not perform successfully, the integration pipeline fails.
 
+We then publish every build artifact to their respective repositories (5):
+* Push all of the images belonging to the Kubeflow training pipeline and Seldon's Inference Graph to a registry.
+* Publish a new version of a Helm Chart containing the new version of the service (Seldon Deployment Object).
+* Push the new model version to the model repository;
+* Deploy the new version of the Kubeflow ML training pipeline to the Kubeflow server.
 
-==>>>
+The staging environment repository should then be updated with the new version of the application (6). The deployment is performed declaratively via the Jenkins X Kubernetes operator, that synchronizes the repository state with the cluster applicational state.
 
-The pipeline to transform data for training is different from the pipeline that transforms data at inference time
+A new version of the service is then deployed (7), consisting of the following assets:
 
-Kubernetes is able to provide answers to the infrastcuture
+* Kubeflow workflow hat represents the training process and can be triggered manually with new inputs;
+* A model inference graph that can serve requests (or batches of requests) via `REST` or `gRPC`;
+* A Grafana dashboard with default visualizations like number of requests/sec, model latency or model performance (if signal available);
+* An Istio VirtualService;
 
-The platform wont be ready without support for pregressive delivery.
+The model is exposed to be consume outside of the cluster through a Load Balancer (8) (either L4 or L7).
 
-The treat code and data changes seamlessly in the same way, we cannot explicit consume data from within the ML workflows. A declarative approach is needed, where we declare the intended version of the data.
 
 
 
