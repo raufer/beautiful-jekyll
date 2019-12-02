@@ -63,7 +63,7 @@ loss when compared to the *training phase*.
 
 Moreover, we need a tool that provides us to create flexible inference pipelines that can go beyhond the traditional pattern of receiving the data and calling the model's API. Here's an illustration of a possible inference pipeline:
 
-![platform]({{ "/img/ops-ml/seldon-2.png" | absolute_url }})
+![platform]({{ "/img/ops-ml/seldon-22.png" | absolute_url }})
 
 In this example the service receives some input data; transforms it to extract the relevant features; enriches the data with a query to some database to provide extra context; and then asks a prediction from multiple models.o
 
