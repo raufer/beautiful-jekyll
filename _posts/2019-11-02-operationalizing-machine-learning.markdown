@@ -2,7 +2,7 @@
 layout: post
 title:  "The Open approach to Operationalize Machine Learning"
 date:   2019-08-02 09:01:33 +0000
-subtitle: Constructing an open-source ecosystem to handle the complexity of Machine Learning services
+subtitle: Constructing an open-source ecosystem to govern the complexity of Machine Learning services
 <!-- bigimg: /img/path.jpg -->
 gh-repo: raufer/flow-writer
 gh-badge: [star, fork]
@@ -54,8 +54,7 @@ Here's an illustration of a workflow:
 
 ![platform]({{ "/img/ops-ml/kubeflow-1.png" | absolute_url}})
 
-
-
+Every step runs in its own container, allowing us to: isolate software dependencies; optimize required resources for each step; and easily parallelize parts of the workflow.
 
 #### Model Serving
 
@@ -99,9 +98,13 @@ NAMESPACE      NAME                          REFERENCE                          
 jx-staging     manticore-manticore-a0b1623   Deployment/manticore-manticore-a0b1623   39%/80%   1         4         1          28d
 ```
 
-To expose the models to consumers outside of the cluster Seldon integrates with [istio](https://istio.io/). Everytime that the Seldon Kubernetes Operator detects a request for a Seldon deployment, it injects the necessary instructions to wire the service to `istio`. `L7 Routing` capability is available via the integration with `istio`.
+To expose the models to consumers outside of the cluster Seldon integrates with [istio](https://istio.io/). Everytime that the Seldon Kubernetes Operator detects a request for a Seldon deployment, it injects the necessary instructions to wire the service to `istio`. `L7 Routing` capability is also available via the integration with `istio`.
+
+![platform]({{ "/img/ops-ml/seldon-3.png" | absolute_url }})
 
 #### Model Observability
+
+Once a model is live, we do need to be able to monitor technical metrics like the number of requests/sec; the response latency; 
 
 #### Governance
 
