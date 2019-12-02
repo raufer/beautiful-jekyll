@@ -1,11 +1,9 @@
 ---
 layout: post
-title:  "The Open approach to Operationalize Machine Learning"
+title:  "The open-approach to Operationalize Machine Learning"
 date:   2019-08-02 09:01:33 +0000
 subtitle: Constructing an open-source ecosystem to govern the complexity of Machine Learning services
 <!-- bigimg: /img/path.jpg -->
-gh-repo: raufer/flow-writer
-gh-badge: [star, fork]
 tags: [machine-learning, operations, machine learning platform, machine learning operationalization]
 ---
 
@@ -262,7 +260,7 @@ Special purpose hardware like GPUs should be made available on demand when neede
 
 Different flavours of these environments, with different technological stacks, can provide development velocity and flexibility to different teams.
 
-[JupyterHub](https://jupyterhub.readthedocs.io/) or [Anaconda](https://www.anaconda.com/) are well known tools that provide user-sessions on top of Kubernetes.
+[JupyterHub](https://jupyterhub.readthedocs.io/) or [Anaconda](https://www.anaconda.com/) are well known tools that provide exploratoty user-sessions on top of Kubernetes.
 
 
 ## Workflow Diagram
