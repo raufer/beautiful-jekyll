@@ -23,7 +23,7 @@ Further, there are complex ethical, legal, conduct and reputational issues assoc
 data. For example, are data being used unfairly to exclude individuals or groups, or to promote unjustifiably
 privileged access for others? Controls are needed to ensure data is treated fairly.
 
-We are going to propose a technology stack for an ML-platform solution that can describe processes respecting the desired properties. The following illustrates the different components involved:
+We are going to propose a technology stack for an ML-platform solution that can describe workflows respecting these desired properties. The following diagram illustrates the different components/primitives involved, which we are going to discuss:
 
 ![platform]({{ "/img/ops-ml/platform-components-2.png" | absolute_url}})
 
@@ -42,9 +42,9 @@ Most of the times they aren't as simple as fitting one model on the dataset; the
 
 As an example consider a Genetic Programming library to evolve an ML pipeline that considers various preprocessing steps and multiple machine learning algorithms; Assume a configuration of `100 generations` with `100 population size`; This would result in 10,000 model configurations to evaluate with 10-fold cross-validation, which means that roughly 100,000 models are fit and evaluated on the training data. This is a time-consuming procedure, even for simpler models like decision trees.
 
-We need an orchestration tool that allows us to orchestrate a machine learning training pipeline at scale. [Kubeflow Pipelines](https://www.kubeflow.org/docs/pipelines/overview/pipelines-overview/) is such a tool, belonging to Google's [Kubeflow](https://www.kubeflow.org/) ML ecosystem, a project dedicated to making deployments of machine learning (ML) workflows on Kubernetes.
+We need a tool to allows us to orchestrate a machine learning training pipeline at scale. [Kubeflow Pipelines](https://www.kubeflow.org/docs/pipelines/overview/pipelines-overview/) is such a tool, belonging to Google's [Kubeflow](https://www.kubeflow.org/) ML ecosystem, a project dedicated to making deployments of machine learning (ML) workflows on Kubernetes.
 
-Kubeflow Pipelines is Kubernetes-native workflow orchestrator that builds on top of [Argo Workflows](https://argoproj.github.io/argo/); it isn't a typical orchestrator in the sense that it knows the structure of a typical ML workflow and so provides features that leverage that knowledge. It has a built-in `Experiment` concept that can be used to run a workflow with a set of parameters so that we can then track the associated performance metrics. It also allows a workflow to output
+Kubeflow Pipelines is Kubernetes-native workflow orchestrator that builds on top of [Argo Workflows](https://argoproj.github.io/argo/); it isn't a typical orchestrator in the sense that it knows the structure of a typical ML workflow and threfore it can provide features that leverage on that knowledge. It has a built-in `Experiment` concept that can be used to run a workflow with a set of parameters so that we can then track the associated performance metrics. It also allows a workflow to output
 different artifacts that are used to assess the model performance/behavior.
 
 Here's an illustration of a workflow:
@@ -59,15 +59,15 @@ Once a training process results in a satisfactory model, the later should be mad
 
 We need a framework agnostic tool to rapidly deploy pipelines for model inference at scale. Note that, in the most general case, the transformations that occur at *training time* are not necessarily the same that we can afford to perform at *inference time*. There is some differentiation between transformation *training* and *testing* data; this is because training sets are typically enhanced by processing the full dataset all at once to extract meaningful information, while at *inference time* the data must be processed row by row (assuming a real-time system), leading to some information loss when compared to the *training phase*.
 
-Moreover, we need a tool that provides us to create flexible inference pipelines that can go beyond the traditional pattern of receiving the data and calling the model's API. Here's an illustration of a possible inference pipeline:
+Moreover, we need a tool that provides us the flexibility to create inference pipelines that go beyond the traditional pattern of receiving the data and calling the model's API. Here's an illustration of a possible inference pipeline:
 
 ![platform]({{ "/img/ops-ml/seldon-222.png" | absolute_url }})
 
-In this example the service receives some input data; transforms it to extract the relevant features; enriches the data with a query to some database to provide extra context; and then asks a prediction from multiple models.o
+In this example the service receives some input data; transforms it to extract the relevant features; enriches the data with a query to some database to provide extra context; and then asks a prediction from multiple models.
 
 Being able to create arbitrarily complex inference graphs creates the opportunity to generalize common behavior like creating generic steps for outlier detection or performing multi-armed bandits tests.
 
-[Seldon](https://github.com/SeldonIO/seldon-core) is a model serving framework that supports model deployment on a Kubernetes cluster. It allows for the creating of inference graphs, where each step runs as a different container.
+[Seldon](https://github.com/SeldonIO/seldon-core) is a model serving framework that supports model deployment on a Kubernetes cluster. It allows for the creation of inference graphs, where each step runs as a different container.
 
 Every graph has a model orchestration pod at the top with a standardized API contract for both REST and gRPC. When it receives a request (or a batch of requests) it then triggers the execution of the graph. The of the wiring between the steps is handled by Seldon.
 
@@ -85,7 +85,7 @@ hpaSpec:
           targetAverageUtilization: 0.80
 ```
 
-This, in turn, will create Horizontal Pod Autoscaler (HPA) rules in Kubernetes that monitor the service metrics. Once the metric threshold is not respected, a service replica is created to cope with the increased traffic.
+This, in turn, will create a Horizontal Pod Autoscaler (HPA) rule in Kubernetes that monitors the service metrics. Once the metric threshold fails to be respected, a service replica is created to cope with the increased volume of traffic.
 
 ```bash
 ❯ kubectl get hpa --all-namespaces
@@ -98,7 +98,7 @@ To expose the models to consumers outside of the cluster Seldon integrates with 
 
 Each deployment exposes two default endpoints: `predict` and `feedback`:
 
-![platform]({{ "/img/ops-ml/seldon-41.png" | absolute_url }})
+![platform]({{ "/img/ops-ml/seldon-3.png" | absolute_url }})
 
 The `predict` is the one used to trigger the execution of the graph to get an inference. We can use the `feedback` endpoint to capture responses when these are made available. The later is important for:
 
@@ -288,6 +288,7 @@ A new version of the service is then deployed (7), consisting of the following a
 
 * Kubeflow workflow hat represents the training process and can be triggered manually with new inputs;
 * A model inference graph that can serve requests (or batches of requests) via `REST` or `gRPC`;
+* Horizontal Pod Autoscaler (HPA) rule to ensure the scalability of the service;
 * A Grafana dashboard with default visualizations like the number of requests/sec, model latency or model performance (if signal available);
 * An Istio VirtualService;
 
