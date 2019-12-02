@@ -103,7 +103,7 @@ Each deployment exposes two default endpoints: `predict` and `feedback`:
 The `predict` is the one used to to retrieve an inference. We can use the `feedback` endpoint to capture responses when these are made available. The later is important for:
 
 * Help to decide which model should serve more traffic when running inference graphs with A/B or multi-armed bandits, given the current performance;
-* Models that support online training;
+* Models supporting *online-training*;
 * Capturing new labeled data to be used in retraining jobs;
 
 <br/><br/>
