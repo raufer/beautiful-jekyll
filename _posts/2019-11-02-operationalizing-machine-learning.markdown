@@ -4,7 +4,7 @@ title:  "The open-approach to Operationalize Machine Learning"
 date:   2019-08-02 09:01:33 +0000
 subtitle: Constructing an open-source ecosystem to govern the complexity of Machine Learning services
 <!-- bigimg: /img/path.jpg -->
-tags: [machine learning deployments, machine-learning, operations, machine learning platform, machine learning operationalization]
+tags: [opsml, ml ops, machine learning deployments, machine-learning, operations, machine learning platform, machine learning operationalization]
 ---
 This blog post discusses the operationalization of machine learning systems. From an engineering perspective, these systems pose enormous challenges due to the high variability of requirements that different use cases have. As the machine-learning maturity of organizations evolves, the complexity required to manage these systems grows exponentially; The proliferation of ML frameworks makes it hard to abstract layers of common functionality and, consequently, automating the whole process becomes even harder.
 
