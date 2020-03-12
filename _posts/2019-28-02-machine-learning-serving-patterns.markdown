@@ -6,7 +6,7 @@ subtitle: Overview of the typical patterns of consumption of machine learning mo
 <!-- bigimg: /img/path.jpg -->
 tags: [model serving, model serving patterns, ml serving, opsml, ml ops, machine learning deployments, machine-learning, operations, machine learning platform, machine learning operationalization]
 ---
-In a [previous post](https://raufer.github.io/2019/08/02/operationalizing-machine-learning/) we have discussed in some detail the design of a machine learning platform covering model training, serving governance and observability.
+In a [previous post](https://raufer.github.io/2019/08/02/operationalizing-machine-learning/) we have discussed in some detail the design of a machine learning platform covering model training, serving, governance and observability.
 
 We are now going to look with more detail to **model serving**:
 
@@ -17,11 +17,11 @@ We are now going to look with more detail to **model serving**:
 
 ### The Patterns
 
-1. **Online Statless**
+1. **Online Stateless**
 
 The consumption is done on an event basis, hence the model needs to exposed behind a service, e.g. `REST`, `gRPC`. The consumer has the ownership of sending all of the necessary data for the inference operation as dictated by the API contract. Useful to obtain inferences for a single input or a batch of them. Acceptable response times are typically on the subsecond range. Each request is independent and therefore no state needs to be mantained.
 
-![online-statless]({{ "/img/ml-serving/online-statless.png" | absolute_url}})
+![online-statless]({{ "/img/ml-serving/online-stateless.png" | absolute_url}})
 
 For this consumption pattern, the service exposing the model needs to be operational on a continuous basis since the service does not know in advance when consumers are going to request an inference.
 
@@ -31,7 +31,7 @@ In terms of scalability we are primarily interested in responding to and *increa
 
 This consumption pattern is required for more complex scenarios where the the consumer might require some level of interactivity with the model service.
 
-![online-stateful]({{ "/img/ml-serving/online-statefull.png" | absolute_url}})
+![online-stateful]({{ "/img/ml-serving/online-stateful.png" | absolute_url}})
 
 E.g.:
 
