@@ -58,9 +58,45 @@ The resulting inferences are then typically saved back to a storage system for l
 
 ### The Solution
 
-![solution]({{ "/img/ml-serving/solution2.png" | absolute_url}})
+The following diagram covers the deployment of a model to cover various consumption patterns.
+
+![solution]({{ "/img/ml-serving/solution3.jpeg" | absolute_url}})
+
+Assuming the `GitOps` is being used, whenever a new version of the model service is commited (1), the deployment against the infrasructure is performed in a declarative fashion.
+A thin Jenkins Pipeline (2) is triggered that renders kubernetes objects, runs a linter and applies the cahnges
+
+For online serving (3) a `Seldon Deployment` object is deployed, consisting of:
+
+- An inference pipelin, that wraps the model,  behind a service;
+- A real time dashboard with relevant metrics;
+- (Optionally) an explainer to support model interpretability;
+
+The model should be located at a model registry (4) that takes care of versioning and metadata management.
+
+[Seldon](https://github.com/SeldonIO/seldon-core) is a model serving framework that supports model deployment on a Kubernetes cluster. It allows for the creation of inference graphs, where each step runs as a different container.
+
+Every graph has a model orchestration pod at the top with a standardized API contract for both REST and gRPC. When it receives a request (or a batch of requests) it then triggers the execution of the graph. The of the wiring between the steps is handled by Seldon.
+
+It also leverages Kubernetes's inherent scalability to create replicas of the service to cope with peaks in the number of requests.
+
+In parallel to this deployment, a offline batch pipeline (6) should also be available, to perform the following tasks:
+
+- read a batch of the data, e.g. one month;
+- extract relevant features from the data;
+- uses one or more models to score data offline;
+- writes the results back to strorage;
+
+Notes that this might require some integration work if model wasn't trained via `Spark API`, as the libraries with the relevant `APIs` to load the model into memory must be available on every node;
+
+This pipeline exposes the model inference results as additional columns that can be posteriorly consumed by other applications;
+The deployment of the batch pipeline must also be supported by orchestraton logic (5) to trigger the execution of the pipeline with the right configutations.
 
 ### Final Comments
+
+Having to support more than one pattern has some disadvantages:
+
+- The observation/monitoring capability to measures things like *data drift* or *prediciton bias* might need to be replicated in both the online and the offline cases, which can sometimes involve duplicated work;
+- The same can be said with regards to model interpretability / explainability;
 
 
 
