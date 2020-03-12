@@ -56,7 +56,7 @@ The resulting inferences are then typically saved back to a storage system for l
 
 ### The Solution
 
-![solution]({{ "/img/ml-serving/solution.jpeg" | absolute_url}})
+![solution]({{ "/img/ml-serving/solution.png" | absolute_url}})
 
 ### Final Comments
 
