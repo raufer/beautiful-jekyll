@@ -98,6 +98,7 @@ Having to support more than one pattern has some disadvantages:
 - The observation/monitoring capability to measures things like *data drift* or *prediciton bias* might need to be replicated in both the online and the offline cases, which can sometimes involve duplicated work;
 - The same can be said with regards to model interpretability / explainability;
 
+---
 
 
 
