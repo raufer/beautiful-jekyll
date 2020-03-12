@@ -17,7 +17,7 @@ We are now going to look with more detail to **model serving**:
 
 ### The Patterns
 
-1. **Online Stateless**
+##### Online Stateless
 
 The consumption is done on an event basis, hence the model needs to exposed behind a service, e.g. `REST`, `gRPC`. The consumer has the ownership of sending all of the necessary data for the inference operation as dictated by the API contract. Useful to obtain inferences for a single input or a batch of them. Acceptable response times are typically on the subsecond range. Each request is independent and therefore no state needs to be mantained.
 
@@ -27,7 +27,7 @@ For this consumption pattern, the service exposing the model needs to be operati
 
 In terms of scalability we are primarily interested in responding to and *increased number of individual consumers* and not to *increases in the volume of data*  being passed to the service; in this pattern we assume that the consumer is interested in obtaining inferences for one/small-batch of examples. More suitable patterns should be used if a particular consumer needs to obtain inferences for arbitrarily large datasets.
 
-2. **Online Stateful**
+##### Online Stateful
 
 This consumption pattern is required for more complex scenarios where the the consumer might require some level of interactivity with the model service.
 
@@ -43,7 +43,7 @@ E.g.:
 This scenario requires some form of state persistance across calls for the different consumers.
 
 
-3. Offline in Batches.
+##### Offline in Batches
 
 For scenarios where it is requried to perform model inference at scale, an offline batch pipeline is the best option. Obviously because we can make use of tansient infrastructure to serve the inference job. This pattern also differs from the `online` patterns with regards to the location of the data; for the online patterns the consumer has the responsability to send the data; whilst for offline inference we expect the data to be located at a known storage.
 
