@@ -21,7 +21,7 @@ We are now going to look with more detail to **model serving**:
 
 #### Online Stateless
 
-The consumption is done on an event basis, hence the model needs to exposed behind a service, e.g. `REST`, `gRPC`. The consumer has the ownership of sending all of the necessary data for the inference operation as dictated by the API contract. Useful to obtain inferences for a single input or a batch of them. Acceptable response times are typically on the subsecond range. Each request is independent and therefore no state needs to be maintained.
+The consumption is done on an event basis, hence the model needs to exposed behind a service, e.g. `REST`, `gRPC`. The consumer has the ownership of sending all of the necessary data for the inference operation as dictated by the API contract. Useful to obtain inferences for a single input or a batch of them. Acceptable response times are typically on the subsecond range. Each request is independent and therefore no state needs to be mantained.
 
 ![online-statless]({{ "/img/ml-serving/online-stateless2.png" | absolute_url}})
 
@@ -42,16 +42,16 @@ E.g.:
 - Consumer `C1` is not satisfied and asks the service `S` to try again;
 - Service `S` answers back with a second recommendation `R2`;
 
-This scenario requires some form of state persistence across calls for the different consumers.
+This scenario requires some form of state persistance across calls for the different consumers.
 
 
 #### Offline in Batches
 
-For scenarios where it is required to perform model inference at scale, an offline batch pipeline is the best option. Obviously because we can make use of transient infrastructure to serve the inference job. This pattern also differs from the `online` patterns with regards to the location of the data; for the online patterns the consumer has the responsibility to send the data; whilst for offline inference we expect the data to be located at a known storage.
+For scenarios where it is requried to perform model inference at scale, an offline batch pipeline is the best option. Obviously because we can make use of tansient infrastructure to serve the inference job. This pattern also differs from the `online` patterns with regards to the location of the data; for the online patterns the consumer has the responsability to send the data; whilst for offline inference we expect the data to be located at a known storage.
 
 ![offline-batch]({{ "/img/ml-serving/offline-batch2.png" | absolute_url}})
 
-For smaller datasets, we could in theory have a consumer sending out a stream of batches to the online service but this extra logic would need to be implemented and maintained at the consumer side. Data processing frameworks like `Apache Spark` can easily distribute and collect the results.
+For smaller datasets, we could in theory have a consumer sending out a stream of batches to the online service but this extra logic would need to be implemented and mantained at the consumer side. Data processing frameworks like `Apache Spark` can easily distribute and collect the results.
 
 The resulting inferences are then typically saved back to a storage system for later consumption by downstream applications, e.g. dashboards.
 
@@ -60,14 +60,14 @@ The resulting inferences are then typically saved back to a storage system for l
 
 The following diagram covers the deployment of a model to cover various consumption patterns.
 
-![solution]({{ "/img/ml-serving/solution4.jpeg" | absolute_url}})
+![solution]({{ "/img/ml-serving/solution3.jpeg" | absolute_url}})
 
-Assuming the `GitOps` is being used, whenever a new version of the model service is committed (1), the deployment against the infrastructure is performed in a declarative fashion.
-A thin Jenkins Pipeline (2) is triggered that renders kubernetes objects, runs a linter and applies the changes.
+Assuming the `GitOps` is being used, whenever a new version of the model service is commited (1), the deployment against the infrasructure is performed in a declarative fashion.
+A thin Jenkins Pipeline (2) is triggered that renders kubernetes objects, runs a linter and applies the cahnges
 
 For online serving (3) a `Seldon Deployment` object is deployed, consisting of:
 
-- An inference pipeline, that wraps the model,  behind a service;
+- An inference pipelin, that wraps the model,  behind a service;
 - A real time dashboard with relevant metrics;
 - (Optionally) an explainer to support model interpretability;
 
@@ -84,18 +84,18 @@ In parallel to this deployment, a offline batch pipeline (6) should also be avai
 - read a batch of the data, e.g. one month;
 - extract relevant features from the data;
 - uses one or more models to score data offline;
-- writes the results back to storage;
+- writes the results back to strorage;
 
 Notes that this might require some integration work if model wasn't trained via `Spark API`, as the libraries with the relevant `APIs` to load the model into memory must be available on every node;
 
 This pipeline exposes the model inference results as additional columns that can be posteriorly consumed by other applications;
-The deployment of the batch pipeline must also be supported by orchestration logic (5) to trigger the execution of the pipeline with the right configurations.
+The deployment of the batch pipeline must also be supported by orchestraton logic (5) to trigger the execution of the pipeline with the right configutations.
 
 ### Final Comments
 
 Having to support more than one pattern has some disadvantages:
 
-- The observation/monitoring capability to measures things like *data drift* or *prediction bias* might need to be replicated in both the online and the offline cases, which can sometimes involve duplicated work;
+- The observation/monitoring capability to measures things like *data drift* or *prediciton bias* might need to be replicated in both the online and the offline cases, which can sometimes involve duplicated work;
 - The same can be said with regards to model interpretability / explainability;
 
 ---
