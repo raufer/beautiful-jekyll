@@ -6,7 +6,6 @@ subtitle: Overview of the typical patterns of consumption of machine learning mo
 <!-- bigimg: /img/path.jpg -->
 tags: [model serving, , model serving patterns, ml serving, opsml, ml ops, machine learning deployments, machine-learning, operations, machine learning platform, machine learning operationalization]
 ---
-
 In a [previous post](https://raufer.github.io/2019/08/02/operationalizing-machine-learning/) we have discussed in some detail the design of a machine learning platform covering model training, serving governance and observability.
 
 We are now going to look with more detail to **model serving**:
