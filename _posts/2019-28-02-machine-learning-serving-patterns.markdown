@@ -17,6 +17,8 @@ We are now going to look with more detail to **model serving**:
 
 ### The Patterns
 
+---
+
 #### Online Stateless
 
 The consumption is done on an event basis, hence the model needs to exposed behind a service, e.g. `REST`, `gRPC`. The consumer has the ownership of sending all of the necessary data for the inference operation as dictated by the API contract. Useful to obtain inferences for a single input or a batch of them. Acceptable response times are typically on the subsecond range. Each request is independent and therefore no state needs to be mantained.
