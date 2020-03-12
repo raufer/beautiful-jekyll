@@ -21,7 +21,7 @@ We are now going to look with more detail to **model serving**:
 
 The consumption is done on an event basis, hence the model needs to exposed behind a service, e.g. `REST`, `gRPC`. The consumer has the ownership of sending all of the necessary data for the inference operation as dictated by the API contract. Useful to obtain inferences for a single input or a batch of them. Acceptable response times are typically on the subsecond range. Each request is independent and therefore no state needs to be mantained.
 
-![online-statless]({{ "/img/ml-serving/online-stateless.png" | absolute_url}})
+![online-statless]({{ "/img/ml-serving/online-stateless2.png" | absolute_url}})
 
 For this consumption pattern, the service exposing the model needs to be operational on a continuous basis since the service does not know in advance when consumers are going to request an inference.
 
@@ -31,7 +31,7 @@ In terms of scalability we are primarily interested in responding to and *increa
 
 This consumption pattern is required for more complex scenarios where the the consumer might require some level of interactivity with the model service.
 
-![online-stateful]({{ "/img/ml-serving/online-stateful.png" | absolute_url}})
+![online-stateful]({{ "/img/ml-serving/online-stateful2.png" | absolute_url}})
 
 E.g.:
 
@@ -47,7 +47,7 @@ This scenario requires some form of state persistance across calls for the diffe
 
 For scenarios where it is requried to perform model inference at scale, an offline batch pipeline is the best option. Obviously because we can make use of tansient infrastructure to serve the inference job. This pattern also differs from the `online` patterns with regards to the location of the data; for the online patterns the consumer has the responsability to send the data; whilst for offline inference we expect the data to be located at a known storage.
 
-![offline-batch]({{ "/img/ml-serving/offline-batch.png" | absolute_url}})
+![offline-batch]({{ "/img/ml-serving/offline-batch2.png" | absolute_url}})
 
 For smaller datasets, we could in theory have a consumer sending out a stream of batches to the online service but this extra logic would need to be implemented and mantained at the consumer side. Data processing frameworks like `Apache Spark` can easily distribute and collect the results.
 
@@ -56,7 +56,7 @@ The resulting inferences are then typically saved back to a storage system for l
 
 ### The Solution
 
-![solution]({{ "/img/ml-serving/solution.png" | absolute_url}})
+![solution]({{ "/img/ml-serving/solution2.png" | absolute_url}})
 
 ### Final Comments
 
